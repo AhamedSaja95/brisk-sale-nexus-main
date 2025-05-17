@@ -50,15 +50,34 @@ const Products = () => {
     setFormOpen(false);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (productToDelete) {
-      deleteProduct(productToDelete);
-      toast({
-        title: "Product deleted",
-        description: "Product has been removed from inventory"
-      });
-      setProductToDelete(null);
-      setDeleteConfirmOpen(false);
+      try {
+        await deleteProduct(productToDelete);
+        toast({
+          title: "Product deleted",
+          description: "Product has been removed from inventory"
+        });
+      } catch (error) {
+        const err = error as { message?: string };
+        // Check if error is related to foreign key constraint
+        if (err.message?.includes('foreign key constraint')) {
+          toast({
+            title: "Cannot delete product",
+            description: "This product is used in existing invoices. Please archive it instead.",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to delete product",
+            variant: "destructive"
+          });
+        }
+      } finally {
+        setProductToDelete(null);
+        setDeleteConfirmOpen(false);
+      }
     }
   };
 
@@ -94,6 +113,7 @@ const Products = () => {
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the product from the inventory.
+              Note: Products that are used in existing invoices cannot be deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

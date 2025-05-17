@@ -27,6 +27,7 @@ const InvoiceForm = ({
   const [invoiceNumber, setInvoiceNumber] = useState(initialInvoiceNumber);
   const [customerName, setCustomerName] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [cashAmountError, setCashAmountError] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [discount, setDiscount] = useState(0);
@@ -47,9 +48,16 @@ const InvoiceForm = ({
   useEffect(() => {
     // Check form validity whenever dependencies change
     const totalAmount = calculateTotal();
-    const isValid = items.length > 0 && cashAmount >= totalAmount;
+    const isValid = items.length > 0;
     
-    setIsFormValid(isValid);
+    // Validate cash amount
+    if (cashAmount < totalAmount) {
+      setCashAmountError(`Cash amount must be at least Rs. ${totalAmount.toFixed(2)}`);
+      setIsFormValid(false);
+    } else {
+      setCashAmountError("");
+      setIsFormValid(isValid);
+    }
     
     // Auto-set cash amount to match total when new items are added
     if (items.length > 0 && !editMode) {
@@ -303,13 +311,18 @@ const InvoiceForm = ({
 
           <div className="space-y-2">
             <Label htmlFor="cashAmount">Cash Amount</Label>
+            {cashAmountError && (
+              <p className="text-sm text-red-500">{cashAmountError}</p>
+            )}
             <Input
               id="cashAmount"
               type="number"
-              min="0"
+              min={calculateTotal()}
               step="0.01"
               value={cashAmount}
               onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)}
+              className={cashAmountError ? "border-red-500" : ""}
+              aria-invalid={cashAmountError ? "true" : "false"}
             />
           </div>
 

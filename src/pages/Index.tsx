@@ -37,7 +37,7 @@ const Index = () => {
       title: "Total Sales",
       description: "Revenue from all invoices",
       value: totalSales.toFixed(2),
-      prefix: "₹",
+      prefix: "Rs",
       action: () => navigate("/create-invoice"),
       actionText: "New Invoice"
     }
