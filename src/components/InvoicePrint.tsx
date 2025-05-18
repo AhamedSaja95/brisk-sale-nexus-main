@@ -12,7 +12,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
     >
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-lg font-bold uppercase mb-0">SUN TRADERS</h2>
+        <h2 className="text-2xl font-medium uppercase mb-0">SUN TRADERS</h2>
         <p className="mb-0">Dedicated Economic Center</p>
         <p className="mb-0">Wellisara.</p>
         <p className="mb-0">Tel: 0112935473</p>
@@ -22,7 +22,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
       <div className="my-2 border-t border-dashed border-gray-400"></div>
 
       {/* Invoice Info */}
-      <div className="flex justify-between">
+      <div className="flex ">
         <div>
           <p className="mb-0">
             {new Date(invoice.date)
@@ -41,12 +41,12 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
           </p>
         </div>
         <div>
-          <p className="mb-0"> INV:{invoice.invoiceNumber}</p>
+          <p className="mb-0 ml-4"> INV:{invoice.invoiceNumber}</p>
         </div>
       </div>
 
       {/* Customer Name */}
-      <p className="mb-0">Customer Name: {invoice.customerName || ""}</p>
+      <p className="mb-0">Customer Name {invoice.customerName || ""}</p>
 
       {/* Separator */}
       <div className="my-2 border-t border-dashed border-gray-400"></div>
@@ -69,7 +69,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
             <p className="font-medium mb-0">{item.product.description}</p>
           </div>
           <div className="flex justify-between mb-2">
-            <div className="w-1/3">{item.product.price.toFixed(2)}</div>
+            <div className="w-1/3 ml-3">{item.product.price.toFixed(2)}</div>
             <div className="w-1/6 text-center">{item.discount.toFixed(2)}</div>
             <div className="w-1/6 text-center">{item.quantity}</div>
             <div className="w-1/3 text-right">{item.amount.toFixed(2)}</div>
@@ -82,20 +82,26 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
 
       {/* Totals */}
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">TOTAL</div>
+        <div className="text-right font-medium w-1/2">TOTAL :</div>
         <div className="w-1/2 text-right">{invoice.totalAmount.toFixed(2)}</div>
       </div>
 
       {/* Separator */}
-      <div className="my-2 border-t border-dashed border-gray-400"></div>
+      {/* <div className="my-2 border-t border-dashed border-gray-400"></div> */}
+      <div className="flex justify-between mb-0">
+        <div className="text-right font-medium w-1/2"></div>
+        <div className="w-1/2 text-center overflow-hidden whitespace-nowrap overflow-hidden ">
+          =====================================
+        </div>
+      </div>
 
       {/* Payment Info */}
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">CASH</div>
+        <div className="text-right font-medium w-1/2">CASH :</div>
         <div className="w-1/2 text-right">{invoice.cashAmount.toFixed(2)}</div>
       </div>
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">BALANCE</div>
+        <div className="text-right font-medium w-1/2">BALANCE :</div>
         <div className="w-1/2 text-right">
           {invoice.balanceAmount.toFixed(2)}
         </div>
@@ -103,6 +109,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
 
       {/* Separator */}
       <div className="my-2 border-t border-dashed border-gray-400"></div>
+      
 
       {/* Footer */}
       <div className="text-center">

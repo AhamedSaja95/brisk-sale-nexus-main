@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Product, InvoiceItem, Invoice } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -45,23 +44,25 @@ const InvoiceForm = ({
     }
   }, [editMode, invoiceToEdit]);
 
+  // Update cashAmount to match total whenever items change
   useEffect(() => {
-    // Check form validity whenever dependencies change
+    const totalAmount = calculateTotal();
+    if (!editMode) {
+      setCashAmount(totalAmount);
+    }
+  }, [items, editMode]);
+
+  // Validate form and cash amount
+  useEffect(() => {
     const totalAmount = calculateTotal();
     const isValid = items.length > 0;
     
-    // Validate cash amount
     if (cashAmount < totalAmount) {
       setCashAmountError(`Cash amount must be at least Rs. ${totalAmount.toFixed(2)}`);
       setIsFormValid(false);
     } else {
       setCashAmountError("");
       setIsFormValid(isValid);
-    }
-    
-    // Auto-set cash amount to match total when new items are added
-    if (items.length > 0 && !editMode) {
-      setCashAmount(totalAmount);
     }
   }, [items, cashAmount, editMode]);
 
@@ -101,7 +102,6 @@ const InvoiceForm = ({
       return;
     }
 
-    // In edit mode, we don't check stock constraints for existing items
     if (!editMode && quantity > selectedProduct.stock) {
       toast({
         title: "Error",
@@ -121,6 +121,7 @@ const InvoiceForm = ({
     };
 
     setItems([...items, newItem]);
+
     setSelectedProductId("");
     setQuantity(1);
     setDiscount(0);
@@ -319,8 +320,11 @@ const InvoiceForm = ({
               type="number"
               min={calculateTotal()}
               step="0.01"
-              value={cashAmount}
-              onChange={(e) => setCashAmount(parseFloat(e.target.value) || 0)}
+              value={cashAmount || ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                setCashAmount(value === "" ? 0 : parseFloat(value) || 0);
+              }}
               className={cashAmountError ? "border-red-500" : ""}
               aria-invalid={cashAmountError ? "true" : "false"}
             />
