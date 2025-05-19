@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,12 +23,12 @@ const Login = () => {
     if (username === "SUN TRADERS" && password === "Sun@2017") {
       // Set session in localStorage
       localStorage.setItem("isAuthenticated", "true");
-      
+
       toast({
         title: "Success",
-        description: "Login successful"
+        description: "Login successful",
       });
-      
+
       // Navigate to dashboard
       navigate("/");
     } else {
@@ -42,7 +41,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">SUN TRADERS POS</h1>
+          <h1 className="text-2xl font-bold">SUN TRADERS</h1>
           <h2 className="text-xl mt-2">Login</h2>
         </div>
 
@@ -77,11 +76,7 @@ const Login = () => {
             />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </form>
