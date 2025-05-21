@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Product, InvoiceItem, Invoice } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import Select from "react-select";
 
 interface InvoiceFormProps {
   products: Product[];
@@ -25,7 +25,8 @@ const InvoiceForm = ({
   const { toast } = useToast();
   const [invoiceNumber, setInvoiceNumber] = useState(initialInvoiceNumber);
   const [customerName, setCustomerName] = useState("");
-  const [selectedProductId, setSelectedProductId] = useState("");
+  const [selectedProductId, setSelectedProductId] = useState<string>("");
+  const [customPrice, setCustomPrice] = useState<number>(0);
   const [cashAmountError, setCashAmountError] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -33,6 +34,14 @@ const InvoiceForm = ({
   const [items, setItems] = useState<InvoiceItem[]>([]);
   const [cashAmount, setCashAmount] = useState(0);
   const [isFormValid, setIsFormValid] = useState(false);
+
+  const calculateTotal = useCallback(() => {
+    return items.reduce((sum, item) => sum + item.amount, 0);
+  }, [items]);
+
+  const calculateBalance = () => {
+    return cashAmount - calculateTotal();
+  };
 
   // Initialize form with invoice data if in edit mode
   useEffect(() => {
@@ -50,7 +59,7 @@ const InvoiceForm = ({
     if (!editMode) {
       setCashAmount(totalAmount);
     }
-  }, [items, editMode]);
+  }, [items, editMode, calculateTotal]);
 
   // Validate form and cash amount
   useEffect(() => {
@@ -64,24 +73,20 @@ const InvoiceForm = ({
       setCashAmountError("");
       setIsFormValid(isValid);
     }
-  }, [items, cashAmount, editMode]);
+  }, [items, cashAmount, editMode, calculateTotal]);
 
   useEffect(() => {
     if (selectedProductId) {
       const product = products.find(p => p.id === selectedProductId) || null;
       setSelectedProduct(product);
+      if (product) {
+        setCustomPrice(product.price);
+      }
     } else {
       setSelectedProduct(null);
+      setCustomPrice(0);
     }
   }, [selectedProductId, products]);
-
-  const calculateTotal = () => {
-    return items.reduce((sum, item) => sum + item.amount, 0);
-  };
-
-  const calculateBalance = () => {
-    return cashAmount - calculateTotal();
-  };
 
   const handleAddItem = () => {
     if (!selectedProduct) {
@@ -111,7 +116,7 @@ const InvoiceForm = ({
       return;
     }
 
-    const amount = (selectedProduct.price * quantity) - discount;
+    const amount = (customPrice * quantity) - discount;
 
     const newItem: InvoiceItem = {
       product: selectedProduct,
@@ -193,32 +198,36 @@ const InvoiceForm = ({
           <h3 className="font-medium mb-2">Add Items</h3>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="space-y-2 md:col-span-2">
             <Label htmlFor="product">Product</Label>
             <Select
-              value={selectedProductId}
-              onValueChange={setSelectedProductId}
-            >
-              <SelectTrigger id="product">
-                <SelectValue placeholder="Select product" />
-              </SelectTrigger>
-              <SelectContent>
-                {products.map((product) => (
-                  <SelectItem key={product.id} value={product.id}>
-                    {product.code} - {product.description}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              value={selectedProductId ? { 
+                value: selectedProductId,
+                label: `${products.find(p => p.id === selectedProductId)?.code} - ${products.find(p => p.id === selectedProductId)?.description}`
+              } : null}
+              onChange={(option) => setSelectedProductId(option?.value || "")}
+              options={products.map(product => ({
+                value: product.id,
+                label: `${product.code} - ${product.description}`
+              }))}
+              isClearable
+              isSearchable
+              placeholder="Search and select a product"
+              className="basic-select"
+              classNamePrefix="select"
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="price">Price (Rs.)</Label>
             <Input
               id="price"
-              value={selectedProduct ? selectedProduct.price.toFixed(2) : "0.00"}
-              disabled
+              type="number"
+              min="0"
+              step="0.01"
+              value={customPrice}
+              onChange={(e) => setCustomPrice(parseFloat(e.target.value) || 0)}
             />
           </div>
 
@@ -276,7 +285,7 @@ const InvoiceForm = ({
                 <TableRow key={index}>
                   <TableCell className="font-medium">{item.product.code}</TableCell>
                   <TableCell>{item.product.description}</TableCell>
-                  <TableCell className="text-right">{item.product.price.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">{(item.amount + item.discount) / item.quantity}</TableCell>
                   <TableCell className="text-right">{item.quantity}</TableCell>
                   <TableCell className="text-right">{item.discount.toFixed(2)}</TableCell>
                   <TableCell className="text-right">{item.amount.toFixed(2)}</TableCell>

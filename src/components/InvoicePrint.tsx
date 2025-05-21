@@ -69,7 +69,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
             <p className="font-medium mb-0">{item.product.description}</p>
           </div>
           <div className="flex justify-between mb-2">
-            <div className="w-1/3 ml-3">{item.product.price.toFixed(2)}</div>
+            <div className="w-1/3 ml-3">{(item.amount / item.quantity).toFixed(2)}</div>
             <div className="w-1/6 text-center">{item.discount.toFixed(2)}</div>
             <div className="w-1/6 text-center">{item.quantity}</div>
             <div className="w-1/3 text-right">{item.amount.toFixed(2)}</div>
