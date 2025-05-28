@@ -216,6 +216,25 @@ const InvoiceForm = ({
               placeholder="Search and select a product"
               className="basic-select"
               classNamePrefix="select"
+              styles={{
+                
+                singleValue: (provided) => ({
+                  ...provided,
+                  fontWeight: 'bold', 
+                  fontSize: '20px',
+                }),
+                option: (provided) => ({
+                  ...provided,
+                  fontWeight: 'bold', 
+                  fontSize: '20px',
+                  marginLeft: '20px',
+                }),
+              
+                // control: (provided) => ({
+                //   ...provided,
+                //   marginLeft: '10px', 
+                // }),
+              }}
             />
           </div>
 
