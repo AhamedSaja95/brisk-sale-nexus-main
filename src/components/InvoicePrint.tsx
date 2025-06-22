@@ -7,7 +7,7 @@ interface InvoicePrintProps {
 const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
   return (
     <div
-      className="bg-white p-4 max-w-md mx-auto font-mono text-sm"
+      className="bg-white p-4 max-w-md mx-auto font-[\'Courier_New\',_Courier,_monospace] text-sm"
       id="print-area"
     >
       {/* Header */}
@@ -53,8 +53,8 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
 
       {/* Column Headers */}
       <div className="flex justify-between mb-1">
-        <div className="w-1/3">PRICE</div>
-        <div className="w-1/6 text-center">DIS</div>
+        <div className="w-1/3 text-center">PRICE</div>
+        <div className="w-1/6 text-left">DIS</div>
         <div className="w-1/6 text-center">QTY</div>
         <div className="w-1/3 text-right">AMOUNT</div>
       </div>
@@ -70,7 +70,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
           </div>
           <div className="flex justify-between mb-2">
             <div className="w-1/3 ml-3">{(item.amount / item.quantity).toFixed(2)}</div>
-            <div className="w-1/6 text-center">{item.discount.toFixed(2)}</div>
+            <div className="w-1/6 text-left">{item.discount.toFixed(2)}</div>
             <div className="w-1/6 text-center">{item.quantity}</div>
             <div className="w-1/3 text-right">{item.amount.toFixed(2)}</div>
           </div>
