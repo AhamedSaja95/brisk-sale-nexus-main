@@ -11,8 +11,8 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
       id="print-area"
     >
       {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-medium uppercase mb-0">SUN TRADERS</h2>
+      <div className="text-center font-bold">
+        <h2 className="text-2xl font-bold uppercase mb-0">SUN TRADERS</h2>
         <p className="mb-0">Dedicated Economic Center</p>
         <p className="mb-0">Wellisara.</p>
         <p className="mb-0">Tel: 0112935473</p>
@@ -22,7 +22,7 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
       <div className="my-2 border-t border-dashed border-gray-400"></div>
 
       {/* Invoice Info */}
-      <div className="flex ">
+      <div className="flex font-bold ">
         <div>
           <p className="mb-0">
             {new Date(invoice.date)
@@ -41,18 +41,18 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
           </p>
         </div>
         <div>
-          <p className="mb-0 ml-4"> INV:{invoice.invoiceNumber}</p>
+          <p className="mb-0 ml-4 font-bold"> INV:{invoice.invoiceNumber}</p>
         </div>
       </div>
 
       {/* Customer Name */}
-      <p className="mb-0">Customer Name {invoice.customerName || ""}</p>
+      <p className="mb-0 font-bold">Customer Name {invoice.customerName || ""}</p>
 
       {/* Separator */}
-      <div className="my-2 border-t border-dashed border-gray-400"></div>
+      <div className="my-2 border-t border-dashed border-gray-400 font-bold"></div>
 
       {/* Column Headers */}
-      <div className="flex justify-between mb-1">
+      <div className="flex justify-between mb-1 font-bold">
         <div className="w-1/3 text-center">PRICE</div>
         <div className="w-1/6 text-left">DIS</div>
         <div className="w-1/6 text-center">QTY</div>
@@ -60,63 +60,63 @@ const InvoicePrint = ({ invoice }: InvoicePrintProps) => {
       </div>
 
       {/* Separator */}
-      <div className="my-1 border-t border-dashed border-gray-400"></div>
+      <div className="my-1 border-t border-dashed border-gray-400 font-bold"></div>
 
       {/* Invoice Items */}
       {invoice.items.map((item, index) => (
-        <div key={index}>
+        <div key={index} >
           <div className="mb-0">
-            <p className="font-medium mb-0">{item.product.description}</p>
+            <p className="  mb-0 font-bold">{item.product.description}</p>
           </div>
           <div className="flex justify-between mb-2">
-            <div className="w-1/3 ml-3">{(item.amount / item.quantity).toFixed(2)}</div>
-            <div className="w-1/6 text-left">{item.discount.toFixed(2)}</div>
-            <div className="w-1/6 text-center">{item.quantity}</div>
-            <div className="w-1/3 text-right">{item.amount.toFixed(2)}</div>
+            <div className="w-1/3 ml-3 font-bold">{(item.amount / item.quantity).toFixed(2)}</div>
+            <div className="w-1/6 text-left font-bold">{item.discount.toFixed(2)}</div>
+            <div className="w-1/6 text-center font-bold">{item.quantity}</div>
+            <div className="w-1/3 text-right font-bold">{item.amount.toFixed(2)}</div>
           </div>
         </div>
       ))}
 
       {/* Separator */}
-      <div className="my-2 border-t border-dashed border-gray-400"></div>
+      <div className="my-2 border-t border-dashed border-gray-400 font-bold"></div>
 
       {/* Totals */}
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">TOTAL :</div>
-        <div className="w-1/2 text-right">{invoice.totalAmount.toFixed(2)}</div>
+        <div className="text-right   w-1/2 font-bold">TOTAL :</div>
+        <div className="w-1/2 text-right font-bold">{invoice.totalAmount.toFixed(2)}</div>
       </div>
 
       {/* Separator */}
       {/* <div className="my-2 border-t border-dashed border-gray-400"></div> */}
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2"></div>
-        <div className="w-1/2 text-center overflow-hidden whitespace-nowrap overflow-hidden ">
+        <div className="text-right   w-1/2 font-bold"></div>
+        <div className="w-1/2 text-center overflow-hidden whitespace-nowrap overflow-hidden font-bold">
           =====================================
         </div>
       </div>
 
       {/* Payment Info */}
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">CASH :</div>
-        <div className="w-1/2 text-right">{invoice.cashAmount.toFixed(2)}</div>
+        <div className="text-right   w-1/2 font-bold">CASH :</div>
+        <div className="w-1/2 text-right font-bold">{invoice.cashAmount.toFixed(2)}</div>
       </div>
       <div className="flex justify-between mb-0">
-        <div className="text-right font-medium w-1/2">BALANCE :</div>
-        <div className="w-1/2 text-right">
+        <div className="text-right   w-1/2 font-bold">BALANCE :</div>
+        <div className="w-1/2 text-right font-bold">
           {invoice.balanceAmount.toFixed(2)}
         </div>
       </div>
 
       {/* Separator */}
-      <div className="my-2 border-t border-dashed border-gray-400"></div>
+      <div className="my-2 border-t border-dashed border-gray-400 font-bold"></div>
       
 
       {/* Footer */}
       <div className="text-center">
-        <p className="mb-0 text-left">
+        <p className="mb-0 text-left font-bold">
           Number of Items: {invoice.items.length}
         </p>
-        <p className="mt-2">THANK YOU COME AGAIN</p>
+        <p className="mt-2 font-bold">THANK YOU COME AGAIN</p>
       </div>
     </div>
   );
